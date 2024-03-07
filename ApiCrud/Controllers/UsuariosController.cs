@@ -63,13 +63,13 @@ namespace ApiCrud.Controllers
 		[HttpDelete("{Id:int}")]
 		public async Task<ActionResult<Usuario>> DeleteUsers(int Id)
 		{
-			var data = await _context.Usuarios.FindAsync(Id);
-			if (data == null)
+			var user = await _context.Usuarios.FindAsync(Id);
+			if (user == null)
 			{
 				return BadRequest();
 			}
 
-			_context.Usuarios.Remove(data); 
+			_context.Usuarios.Remove(user); 
 			await _context.SaveChangesAsync();
 			return NoContent();
 		}

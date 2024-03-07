@@ -1,7 +1,8 @@
 ﻿@page "/datauser/{Id:int}"
 @using ApiRestUser.Models;
 @inject HttpClient http
-@inject NavigationManager n;
+@inject NavigationManager Navigationmanager;
+@rendermode InteractiveServer
 
 @if (usuario != null)
 {
@@ -15,15 +16,18 @@
             </ul>
            <div>
                 <NavLink href=@($"/form/{usuario.Id}") class="btn btn-success">Editar</NavLink>
-                @* <button type="button" class="btn btn-warning" @onclick="EliminarPersona">Eliminar</button> *@
+                
+           </div>
+           <div>
+                <button class="btn btn-primary" @onclick="@(async () => await Delete())">Click me</button>
            </div>
         </div>
 
     </div>
-
 }
 else
 {
+    
     <h1>Cargando...</h1>
 }
 
@@ -34,7 +38,6 @@ else
     [Inject] public IHttpClientFactory ClientFactory { get; set; }
 
 
-
     public Usuario usuario { get; set; }
     private HttpClient _client;
 
@@ -42,31 +45,33 @@ else
     protected override async Task OnInitializedAsync()
     {
         _client = ClientFactory.CreateClient("ServerClient");
-      
+
         try
         {
-            // Corrección aquí: Cambiado a la ruta correcta
+
             usuario = await _client.GetFromJsonAsync<Usuario>($"/api/usuarios/{Id}");
-            Console.WriteLine(Id);
+
         }
         catch (Exception ex)
         {
-            // Aquí puedes manejar el error, por ejemplo, mostrando un mensaje al usuario
+            
             Console.WriteLine($"Error al obtener los usuarios: {ex.Message}");
         }
     }
 
-    // public async Task EliminarPersona()
-    // {
-    //     try
-    //     {
-    //         await _client.DeleteAsync($"/api/usuarios/{usuario.Id}");
-    //         n.NavigateTo("/table/users");
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         // Aquí puedes manejar el error, por ejemplo, mostrando un mensaje al usuario
-    //         Console.WriteLine($"Error al eliminar el usuario: {ex.Message}");
-    //     }
-}
+    private async Task Delete()
+    {
+        if (Id > 0)
+        {
+            await _client.DeleteAsync($"api/usuarios/{Id}");
+            Navigationmanager.NavigateTo("/table/users");
+        }
+        else
+        {
+            Console.WriteLine("Por favor, ingrese un ID de empleado válido.");
+        }
+    }
 
+  
+
+}

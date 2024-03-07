@@ -36,9 +36,7 @@
             
         </EditForm>
     </div>
-    <div>
-       @*  <button class ="btn btn-danger" @onclick="() => EliminarRecurso(Id)">Eliminar Recurso</button> *@
-    </div>
+    
 </div>
 
 @code {
@@ -64,13 +62,14 @@
 
     private async Task UpdateUserAsync()
     {
-        _client = ClientFactory.CreateClient("ServerClient");
+        
         HttpResponseMessage response = await _client.PutAsJsonAsync($"/api/usuarios/{Id}", User);
         if (response.IsSuccessStatusCode)
         {
             Console.WriteLine("Usuario actualizado con éxito.");
         }
     }
+
 
   
 }
