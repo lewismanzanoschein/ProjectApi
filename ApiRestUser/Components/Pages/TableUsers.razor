@@ -1,0 +1,67 @@
+﻿@page "/table/users"
+@using ApiRestUser.Models;
+@inject IHttpClientFactory ClientFactory;
+@inject NavigationManager n;
+
+<h3>TableUsers</h3>
+<NavLink href="/form/users" class="btn  btn-primary"> Crear User</NavLink>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellidos</th>
+            <th scope="col">CC</th>
+            <th scope="col">Telefono</th>
+            <th scope="col">Fecha Nacimiento</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (listausuarios != null)
+        {
+            @foreach (var user in listausuarios)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.Nombre</td>
+                    <td>@user.Apellidos</td>
+                    <td>@user.Numero_Identificacion</td>
+                    <td>@user.Telefono</td>
+                    <td>@user.Fecha_Nacimiento</td>
+                    <td>
+                        <NavLink href=@($"/datauser/{user.Id}") class="btn btn-success">Consultar</NavLink>
+                    </td>
+                </tr>
+
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6">No hay usuarios disponibles.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<Usuarios> listausuarios { get; set; }
+    private HttpClient _client;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _client = ClientFactory.CreateClient("ServerClient");
+        try
+        {
+            listausuarios = await _client.GetFromJsonAsync<List<Usuarios>>("/api/usuarios");
+        }
+        catch (Exception ex)
+        {
+            // Aquí puedes manejar el error, por ejemplo, mostrando un mensaje al usuario
+            Console.WriteLine($"Error al obtener los usuarios: {ex.Message}");
+        }
+    }
+
+ 
+    }
+

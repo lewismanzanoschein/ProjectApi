@@ -1,0 +1,72 @@
+﻿@page "/datauser/{Id:int}"
+@using ApiRestUser.Models;
+@inject HttpClient http
+@inject NavigationManager n;
+
+@if (usuario != null)
+{
+    <div class="card border border-secondary">
+        <div class="card-body">
+            <h5 class="card-title">@usuario.Nombre @usuario.Apellidos</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><span class="text-primary  fw-bold">Número de Identificación: </span>  @usuario.Numero_Identificacion</li>
+                <li class="list-group-item"><span class="text-primary fw-bold">Fecha de Nacimiento:</span>  @usuario.Fecha_Nacimiento</li>
+                <li class="list-group-item"><span class="text-primary   fw-bold">Teléfono:</span>   @usuario.Telefono</li>
+            </ul>
+           <div>
+                <NavLink href=@($"/form/{usuario.Id}") class="btn btn-success">Editar</NavLink>
+                @* <button type="button" class="btn btn-warning" @onclick="EliminarPersona">Eliminar</button> *@
+           </div>
+        </div>
+
+    </div>
+
+}
+else
+{
+    <h1>Cargando...</h1>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [Inject] public IHttpClientFactory ClientFactory { get; set; }
+
+
+
+    public Usuarios usuario { get; set; }
+    private HttpClient _client;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        _client = ClientFactory.CreateClient("ServerClient");
+      
+        try
+        {
+            // Corrección aquí: Cambiado a la ruta correcta
+            usuario = await _client.GetFromJsonAsync<Usuarios>($"/api/usuarios/{Id}");
+            Console.WriteLine(Id);
+        }
+        catch (Exception ex)
+        {
+            // Aquí puedes manejar el error, por ejemplo, mostrando un mensaje al usuario
+            Console.WriteLine($"Error al obtener los usuarios: {ex.Message}");
+        }
+    }
+
+    // public async Task EliminarPersona()
+    // {
+    //     try
+    //     {
+    //         await _client.DeleteAsync($"/api/usuarios/{usuario.Id}");
+    //         n.NavigateTo("/table/users");
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         // Aquí puedes manejar el error, por ejemplo, mostrando un mensaje al usuario
+    //         Console.WriteLine($"Error al eliminar el usuario: {ex.Message}");
+    //     }
+}
+

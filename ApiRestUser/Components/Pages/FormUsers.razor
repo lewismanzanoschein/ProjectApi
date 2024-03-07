@@ -1,0 +1,63 @@
+﻿@page "/form/users"
+
+@using ApiRestUser.Models;
+@inject IHttpClientFactory ClientFactory;
+@inject NavigationManager navigationManager;
+
+<h3>FormUsers</h3>
+
+<div class="card border border-secondary " style="width: 18rem;">
+  
+    <div class="card-body">
+        <EditForm Model="_contact " OnSubmit="Enviar" FormName="formUsers">
+            <div class="mb-3">
+                <label class="form-label">Nombre: </label>
+                <InputText @bind-Value="_contact.Nombre" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Apellidos:</label>
+                <InputText @bind-Value="_contact.Apellidos" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Cc:</label><br />
+                <InputNumber @bind-Value="_contact.Numero_Identificacion" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Telefono:</label>
+                <InputNumber @bind-Value="_contact.Telefono" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Fecha de Nacimiento:</label>
+                <InputDate @bind-Value="_contact.Fecha_Nacimiento" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </EditForm>
+    </div>
+</div>
+
+
+
+
+
+@code {
+    [SupplyParameterFromForm]
+    public Usuarios _contact { get; set; }
+    private HttpClient client;
+
+    protected override void OnInitialized() => _contact ??= new()
+    {
+        Fecha_Nacimiento = DateTime.Now   
+    };
+
+        private async Task Enviar()
+        {
+            client = ClientFactory.CreateClient("ServerClient");
+            HttpResponseMessage result = await client.PostAsJsonAsync($"api/usuarios", _contact);
+            navigationManager.NavigateTo("/table/users");
+            
+        }
+    }
+
