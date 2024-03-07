@@ -10,7 +10,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddHttpClient("ServerClient", client =>
 {
-	client.BaseAddress = new Uri("https://localhost:7055");
+	client.BaseAddress = new Uri("https://localhost:44331");
 });
 
 

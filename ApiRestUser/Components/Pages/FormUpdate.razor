@@ -7,14 +7,14 @@
 
 <div class="card border border-secondary" style="width: 18rem;" >
     <div class="card-body">
-        <EditForm Model="User" OnSubmit="UpdateUserAsync" FormName="UpdateUser">
+        <EditForm Model="User" OnValidSubmit="UpdateUserAsync" FormName="UpdateUser">
             <div class="mb-3">
                 <label class="form-label">Nombre: </label>
-                <InputText  @bind-Value="User.Nombre" />
+                <InputText  @bind-Value="@User.Nombre" />
             </div>
             <div class="mb-3">
                 <label class="form-label">Apellidos:</label>
-                <InputText @bind-Value="User.Apellidos" />
+                <InputText @bind-Value="@User.Apellidos"/>
             </div>
             <div class="mb-3">
                 <label class="form-label">Cc:</label><br />
@@ -42,30 +42,30 @@
 </div>
 
 @code {
-    [SupplyParameterFromForm(FormName = "UpdateUser")]
-    public Usuario User { get; set; } = new Usuario();
-
-    [Inject]
-    private HttpClient _client { get; set; }
-
     [Parameter]
     public int Id { get; set; }
-
+    
+    [Inject] private HttpClient _client { get; set; }
+    
     [Inject] public IHttpClientFactory ClientFactory { get; set; }
-
-
+    
+    [SupplyParameterFromForm(FormName = "UpdateUser")]
+    public Usuario? User { get; set; }
+    
     protected override async Task OnInitializedAsync()
     {
-
-        _client = ClientFactory.CreateClient("ServerClient");
-        User = await _client.GetFromJsonAsync<Usuario>($"api/usuarios/{Id}");
+        if (User == null)
+        {
+            User = new();
+            _client = ClientFactory.CreateClient("ServerClient");
+            User = await _client.GetFromJsonAsync<Usuario>($"api/usuarios/{Id}");    
+        }
     }
 
-    public async Task UpdateUserAsync()
+    private async Task UpdateUserAsync()
     {
+        _client = ClientFactory.CreateClient("ServerClient");
         HttpResponseMessage response = await _client.PutAsJsonAsync($"/api/usuarios/{Id}", User);
-
-      
         if (response.IsSuccessStatusCode)
         {
             Console.WriteLine("Usuario actualizado con éxito.");
