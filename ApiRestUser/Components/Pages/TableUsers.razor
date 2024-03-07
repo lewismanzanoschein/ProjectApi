@@ -45,7 +45,7 @@
 </table>
 
 @code {
-    private List<Usuarios> listausuarios { get; set; }
+    private List<Usuario> listausuarios { get; set; }
     private HttpClient _client;
 
     protected override async Task OnInitializedAsync()
@@ -53,7 +53,7 @@
         _client = ClientFactory.CreateClient("ServerClient");
         try
         {
-            listausuarios = await _client.GetFromJsonAsync<List<Usuarios>>("/api/usuarios");
+            listausuarios = await _client.GetFromJsonAsync<List<Usuario>>("/api/usuarios");
         }
         catch (Exception ex)
         {

@@ -17,14 +17,14 @@ namespace ApiCrud.Controllers
         }
 
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<Usuarios>>> GetUsers()
+		public async Task<ActionResult<IEnumerable<Usuario>>> GetUsers()
 		{
 			return await _context.Usuarios.AsNoTracking().ToListAsync();
 		}
 
 
 		[HttpGet("{Id:int}")]
-		public async Task<ActionResult<Usuarios?>> GetIdUser(int Id)
+		public async Task<ActionResult<Usuario?>> GetIdUser(int Id)
 		{
 			var response = await _context.Usuarios.AsNoTracking().FirstOrDefaultAsync(u => u.Id == Id);
 	
@@ -34,7 +34,7 @@ namespace ApiCrud.Controllers
 				}
 
 		[HttpPost]
-		public async Task<ActionResult<Usuarios>> CreateUser(Usuarios us)
+		public async Task<ActionResult<Usuario>> CreateUser(Usuario us)
 		{
 			_context.Usuarios.Add(us);
 			await _context.SaveChangesAsync();
@@ -42,18 +42,26 @@ namespace ApiCrud.Controllers
 		}
 
 		[HttpPut("{Id:int}")]
-		public async Task<ActionResult<Usuarios>> UpdateUsers(int Id, Usuarios us) {
+		public async Task<ActionResult<Usuario>> UpdateUsers(int Id, Usuario UpdateUser) {
 
             var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Id == Id);
-            usuario.Nombre = us.Nombre;
+            if (usuario == null)
+            {
+                return NotFound();
+            }
 
+			usuario.Nombre = UpdateUser.Nombre;
+			usuario.Apellidos = UpdateUser.Apellidos;
+			usuario.Fecha_Nacimiento = UpdateUser.Fecha_Nacimiento;
+			usuario.Numero_Identificacion = UpdateUser.Numero_Identificacion;
+			usuario.Telefono = UpdateUser.Telefono;
 
-		    _context.SaveChanges();
-			return NoContent();
+            await _context.SaveChangesAsync();
+            return NoContent();
 		}
 
 		[HttpDelete("{Id:int}")]
-		public async Task<ActionResult<Usuarios>> DeleteUsers(int Id)
+		public async Task<ActionResult<Usuario>> DeleteUsers(int Id)
 		{
 			var data = await _context.Usuarios.FindAsync(Id);
 			if (data == null)

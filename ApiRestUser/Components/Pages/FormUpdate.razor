@@ -5,30 +5,30 @@
 
 <h3>Actualizar</h3>
 
-<div class="card border border-secondary" style="width: 18rem;">
+<div class="card border border-secondary" style="width: 18rem;" >
     <div class="card-body">
-        <EditForm Model="@_contact" OnSubmit="Enviar" >
+        <EditForm Model="User" OnSubmit="UpdateUserAsync" FormName="UpdateUser">
             <div class="mb-3">
                 <label class="form-label">Nombre: </label>
-                <InputText  @bind-Value="_contact.Nombre" />
+                <InputText  @bind-Value="User.Nombre" />
             </div>
             <div class="mb-3">
                 <label class="form-label">Apellidos:</label>
-                <InputText @bind-Value="_contact.Apellidos" />
+                <InputText @bind-Value="User.Apellidos" />
             </div>
             <div class="mb-3">
                 <label class="form-label">Cc:</label><br />
-                <InputNumber @bind-Value="_contact.Numero_Identificacion" />
+                <InputNumber @bind-Value="User.Numero_Identificacion" />
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Telefono:</label>
-                <InputNumber @bind-Value="_contact.Telefono" />
+                <InputNumber @bind-Value="User.Telefono" />
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Fecha de Nacimiento:</label>
-                <InputDate @bind-Value="_contact.Fecha_Nacimiento" />
+                <InputDate @bind-Value="User.Fecha_Nacimiento" />
             </div>
             <div>
                 <button type="submit"  class="btn btn-primary">Actualizar</button>
@@ -37,65 +37,40 @@
         </EditForm>
     </div>
     <div>
-        <button class ="btn btn-danger" @onclick="() => EliminarRecurso(Id)">Eliminar Recurso</button>
+       @*  <button class ="btn btn-danger" @onclick="() => EliminarRecurso(Id)">Eliminar Recurso</button> *@
     </div>
 </div>
 
 @code {
-    [SupplyParameterFromForm]
-    public Usuarios _contact { get; set; } = new Usuarios();
+    [SupplyParameterFromForm(FormName = "UpdateUser")]
+    public Usuario User { get; set; } = new Usuario();
+
     [Inject]
     private HttpClient _client { get; set; }
+
     [Parameter]
     public int Id { get; set; }
+
     [Inject] public IHttpClientFactory ClientFactory { get; set; }
 
 
     protected override async Task OnInitializedAsync()
     {
+
         _client = ClientFactory.CreateClient("ServerClient");
-        if (Id > 0)
-        {
-            _contact = await _client.GetFromJsonAsync<Usuarios>($"/api/usuarios/{Id}");
-        }
+        User = await _client.GetFromJsonAsync<Usuario>($"api/usuarios/{Id}");
     }
 
-    private async Task Enviar()
+    public async Task UpdateUserAsync()
     {
-        Usuarios user = new Usuarios()
-            {
-                Nombre = _contact.Nombre,
-                Apellidos = _contact.Apellidos,
-                Numero_Identificacion = _contact.Numero_Identificacion,
-                Fecha_Nacimiento = _contact.Fecha_Nacimiento,
-                Telefono = _contact.Telefono
+        HttpResponseMessage response = await _client.PutAsJsonAsync($"/api/usuarios/{Id}", User);
 
-
-            };
-
-        HttpResponseMessage result = await _client.PutAsJsonAsync($"api/usuarios/{Id}",user);
-        if (result.IsSuccessStatusCode)
-        {
-            Console.WriteLine($"Usuario actualizado con éxito: {user.Nombre}");
-
-        }
-        else
-        {
-            Console.WriteLine($"Error al actualizar el usuario: {result.ReasonPhrase}");
-        }
-
-    }
-
-    private async Task EliminarRecurso(int id)
-    {
-        var response = await _client.DeleteAsync($"api/usuarios/{Id}");
-
+      
         if (response.IsSuccessStatusCode)
         {
-            Console.WriteLine("Recurso eliminado con éxito.");
-
-
+            Console.WriteLine("Usuario actualizado con éxito.");
         }
     }
 
+  
 }

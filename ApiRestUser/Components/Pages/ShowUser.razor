@@ -35,7 +35,7 @@ else
 
 
 
-    public Usuarios usuario { get; set; }
+    public Usuario usuario { get; set; }
     private HttpClient _client;
 
 
@@ -46,7 +46,7 @@ else
         try
         {
             // Corrección aquí: Cambiado a la ruta correcta
-            usuario = await _client.GetFromJsonAsync<Usuarios>($"/api/usuarios/{Id}");
+            usuario = await _client.GetFromJsonAsync<Usuario>($"/api/usuarios/{Id}");
             Console.WriteLine(Id);
         }
         catch (Exception ex)

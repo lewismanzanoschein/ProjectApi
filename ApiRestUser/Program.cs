@@ -1,4 +1,5 @@
-using ApiRestUser.Components;
+
+using BlazorWeb.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 

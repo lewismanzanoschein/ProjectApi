@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiRestUser", "ApiRestUser\ApiRestUser.csproj", "{5B7AB6DA-3F29-469E-AEC3-D8089B2B9FD0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWeb", "ApiRestUser\BlazorWeb.csproj", "{5B7AB6DA-3F29-469E-AEC3-D8089B2B9FD0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiCrud", "ApiCrud\ApiCrud.csproj", "{BC0B4D23-3770-4445-AB3C-ED7496CE6629}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "View", "View\View.csproj", "{B4FE390D-B688-48B9-8F2D-6BB7C57B1699}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +21,6 @@ Global
 		{BC0B4D23-3770-4445-AB3C-ED7496CE6629}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC0B4D23-3770-4445-AB3C-ED7496CE6629}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC0B4D23-3770-4445-AB3C-ED7496CE6629}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B4FE390D-B688-48B9-8F2D-6BB7C57B1699}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B4FE390D-B688-48B9-8F2D-6BB7C57B1699}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B4FE390D-B688-48B9-8F2D-6BB7C57B1699}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B4FE390D-B688-48B9-8F2D-6BB7C57B1699}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
