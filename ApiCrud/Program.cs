@@ -14,17 +14,6 @@ builder.Services.AddDbContext<AplicationDbContext>(P => P.UseSqlServer(
 	builder.Configuration.GetConnectionString("ConnectionDefault")
 	)) ;
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("MyPolicy",
-        builder =>
-        {
-            builder.WithOrigins("https://localhost:7030") // Reemplaza esto con el dominio de tu aplicación Blazor
-                   .AllowAnyHeader()
-                   .AllowAnyMethod();
-        });
-});
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
