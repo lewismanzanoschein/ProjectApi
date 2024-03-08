@@ -4,43 +4,45 @@
 @inject IHttpClientFactory ClientFactory;
 @inject NavigationManager navigationManager;
 
+
+
 <h3>FormUsers</h3>
 
 <div class="card border border-secondary " style="width: 18rem;">
   
     <div class="card-body">
-        <EditForm Model="_contact " OnSubmit="Enviar" FormName="formUsers">
+        <EditForm Model="User " OnSubmit="Enviar" FormName="CreateUsers">
             <DataAnnotationsValidator />
             <ValidationSummary />
             <div class="mb-3">
                 <label class="form-label">Nombre: </label>
-                <InputText @bind-Value="_contact.Nombre" />
-                <ValidationMessage For="() => _contact.Nombre" />
+                <InputText @bind-Value="User.Nombre" />
+                <ValidationMessage For="() => User.Nombre" />
             </div>
             <div class="mb-3">
                 <label class="form-label">Apellidos:</label>
-                <InputText @bind-Value="_contact.Apellidos" />
-                <ValidationMessage For="() => _contact.Apellidos" />
+                <InputText @bind-Value="User.Apellidos" />
+                <ValidationMessage For="() => User.Apellidos" />
             </div>
             <div class="mb-3">
                 <label class="form-label">Cc:</label><br />
-                <InputNumber @bind-Value="_contact.Numero_Identificacion" />
-                <ValidationMessage For="() => _contact.Numero_Identificacion" />
+                <InputNumber @bind-Value="User.Numero_Identificacion" />
+                <ValidationMessage For="() => User.Numero_Identificacion" />
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Telefono:</label>
-                <InputNumber @bind-Value="_contact.Telefono" />
-                <ValidationMessage For="() => _contact.Telefono" />
+                <InputNumber @bind-Value="User.Telefono" />
+                <ValidationMessage For="() => User.Telefono" />
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Fecha de Nacimiento:</label>
-                <InputDate @bind-Value="_contact.Fecha_Nacimiento" />
-                <ValidationMessage For="() => _contact.Fecha_Nacimiento" />
+                <InputDate @bind-Value="User.Fecha_Nacimiento" />
+                <ValidationMessage For="() => User.Fecha_Nacimiento" />
             </div>
 
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Crear</button>
         </EditForm>
     </div>
 </div>
@@ -51,10 +53,10 @@
 
 @code {
     [SupplyParameterFromForm]
-    public Usuario _contact { get; set; }
+    public Usuario User { get; set; }
     private HttpClient client;
 
-    protected override void OnInitialized() => _contact ??= new()
+    protected override void OnInitialized() => User??= new()
     {
         Fecha_Nacimiento = DateTime.Now   
     };
@@ -62,7 +64,7 @@
         private async Task Enviar()
         {
             client = ClientFactory.CreateClient("ServerClient");
-            HttpResponseMessage result = await client.PostAsJsonAsync($"api/usuarios", _contact);
+            HttpResponseMessage result = await client.PostAsJsonAsync($"api/usuarios", User);
             navigationManager.NavigateTo("/table/users");
             
         }
