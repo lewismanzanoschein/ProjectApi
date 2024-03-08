@@ -3,43 +3,42 @@
 @using WebUsers.Models;
 @inject IHttpClientFactory ClientFactory;
 @inject NavigationManager navigationManager;
-
+@rendermode InteractiveServer
 
 
 <h3>FormUsers</h3>
 
-<div class="card border border-secondary " style="width: 18rem;">
+<div class="card border border-secondary mb-2 " style="width: 18rem;">
   
     <div class="card-body">
         <EditForm Model="User " OnSubmit="Enviar" FormName="CreateUsers">
             <DataAnnotationsValidator />
-            <ValidationSummary />
             <div class="mb-3">
                 <label class="form-label">Nombre: </label>
                 <InputText @bind-Value="User.Nombre" />
-                <ValidationMessage For="() => User.Nombre" />
+                <ValidationMessage For="@(() => User.Nombre)" />
             </div>
             <div class="mb-3">
                 <label class="form-label">Apellidos:</label>
                 <InputText @bind-Value="User.Apellidos" />
-                <ValidationMessage For="() => User.Apellidos" />
+                <ValidationMessage For="@(() => User.Apellidos)" />
             </div>
             <div class="mb-3">
                 <label class="form-label">Cc:</label><br />
                 <InputNumber @bind-Value="User.Numero_Identificacion" />
-                <ValidationMessage For="() => User.Numero_Identificacion" />
+                <ValidationMessage For="@(() => User.Numero_Identificacion)" />
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Telefono:</label>
                 <InputNumber @bind-Value="User.Telefono" />
-                <ValidationMessage For="() => User.Telefono" />
+                <ValidationMessage For="@(() => User.Telefono)" />
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Fecha de Nacimiento:</label>
                 <InputDate @bind-Value="User.Fecha_Nacimiento" />
-                <ValidationMessage For="() => User.Fecha_Nacimiento" />
+                <ValidationMessage For="@(() => User.Fecha_Nacimiento)" />
             </div>
 
             <button type="submit" class="btn btn-primary">Crear</button>
@@ -54,19 +53,25 @@
 @code {
     [SupplyParameterFromForm]
     public Usuario User { get; set; }
+
     private HttpClient client;
+
+    private bool StatusForm;
 
     protected override void OnInitialized() => User??= new()
     {
         Fecha_Nacimiento = DateTime.Now   
     };
 
-        private async Task Enviar()
-        {
+    private async Task Enviar()
+    {
             client = ClientFactory.CreateClient("ServerClient");
             HttpResponseMessage result = await client.PostAsJsonAsync($"api/usuarios", User);
-            navigationManager.NavigateTo("/table/users");
-            
-        }
+            navigationManager.NavigateTo("/table/users"); 
+
+    }
+
+
+
     }
 

@@ -67,7 +67,7 @@ else
     private HttpClient _client;
 
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         _client = ClientFactory.CreateClient("ServerClient");
 
@@ -84,6 +84,7 @@ else
         }
     }
 
+
     private async Task Delete()
     {
         if (Id > 0)
@@ -96,6 +97,7 @@ else
             Console.WriteLine("Por favor, ingrese un ID de empleado válido.");
         }
     }
+
 
     public void ShowModal()
     {

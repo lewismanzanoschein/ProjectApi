@@ -6,4 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Components\Pages\FormCreate.razor~RF12bce791.TMP" />
+  </ItemGroup>
+
 </Project>

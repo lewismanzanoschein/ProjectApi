@@ -54,15 +54,7 @@
     protected override async Task OnInitializedAsync()
     {
         _client = ClientFactory.CreateClient("ServerClient");
-        try
-        {
-            listausuarios = await _client.GetFromJsonAsync<List<Usuario>>("/api/usuarios");
-        }
-        catch (Exception ex)
-        {
-            // Aquí puedes manejar el error, por ejemplo, mostrando un mensaje al usuario
-            Console.WriteLine($"Error al obtener los usuarios: {ex.Message}");
-        }
+        listausuarios = await _client.GetFromJsonAsync<List<Usuario>>("/api/usuarios");
     }
 
  

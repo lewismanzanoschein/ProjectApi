@@ -7,27 +7,21 @@ namespace WebUsers.Models
 		[Key]
 		public int  Id { get; set; }
 
-        [Required]
-        [StringLength(10,
-        ErrorMessage = "Maximo 10 digitos")]
+        [Required(ErrorMessage = "La identificacion es requerido.")]
+        [Range(1000000000, 9999999999, ErrorMessage = "El número de identificación debe tener exactamente 10 dígitos.")]
         public long Numero_Identificacion { get; set; }
 
-        [Required]
-        [StringLength(20,
-        ErrorMessage = "Maximo 20 caracteres ")]
+        [Required(ErrorMessage = "La Nombre es requerido.")]
         public  string Nombre { get; set; }
 
-        [Required]
-        [StringLength(30,
-        ErrorMessage = "Maximo 20 caracteres ")]
+        [Required(ErrorMessage = "El Apellido es requerido")]
         public string  Apellidos { get; set; }
 
         [Required]
-        [StringLength(10, ErrorMessage = "La fecha debe tener 10 caracteres (dd/MM/yyyy).")]
         public DateTime Fecha_Nacimiento { get; set; }
 
-        [Required]
-        [StringLength(7, ErrorMessage = "longitud de telefono de 7 caracteres")]
+        [Required(ErrorMessage = "El Telefono es requerido.")]
+        [RegularExpression(@"^\d{7}$", ErrorMessage = "El número debe tener exactamente 7 dígitos.")]
         public int Telefono {  get; set; }
     }
 }

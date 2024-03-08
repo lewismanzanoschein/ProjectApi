@@ -31,7 +31,7 @@ namespace ApiCrud.Controllers
 			return response;
 				
 				
-				}
+		}
 
 		[HttpPost]
 		public async Task<ActionResult<Usuario>> CreateUser(Usuario us)
@@ -40,6 +40,8 @@ namespace ApiCrud.Controllers
 			await _context.SaveChangesAsync();
 			return CreatedAtAction(nameof(GetIdUser), new { id = us.Id }, us);
 		}
+
+
 
 		[HttpPut("{Id:int}")]
 		public async Task<ActionResult<Usuario>> UpdateUsers(int Id, Usuario UpdateUser) {
@@ -60,11 +62,13 @@ namespace ApiCrud.Controllers
             return NoContent();
 		}
 
+
+
 		[HttpDelete("{Id:int}")]
 		public async Task<ActionResult<Usuario>> DeleteUsers(int Id)
 		{
-			var user = await _context.Usuarios.FindAsync(Id);
-			if (user == null)
+			var user = await _context.Usuarios.AsNoTracking().FirstOrDefaultAsync(u => u.Id == Id);
+            if (user == null)
 			{
 				return BadRequest();
 			}
