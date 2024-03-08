@@ -1,7 +1,5 @@
 ﻿using ApiRestUser.Data;
 using ApiRestUser.Models;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata;
@@ -36,10 +34,10 @@ namespace ApiCrud.Controllers
 				
 		}
 
-   
+      
 
 
-        [HttpPost]
+    [HttpPost]
 		public async Task<ActionResult<Usuario>> CreateUser(Usuario us)
 		{
 			_context.Usuarios.Add(us);
@@ -70,6 +68,8 @@ namespace ApiCrud.Controllers
 
 
        
+
+
 
 
 
