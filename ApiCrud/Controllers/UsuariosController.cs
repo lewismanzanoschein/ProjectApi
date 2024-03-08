@@ -1,7 +1,10 @@
 ﻿using ApiRestUser.Data;
 using ApiRestUser.Models;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace ApiCrud.Controllers
 {
@@ -33,7 +36,10 @@ namespace ApiCrud.Controllers
 				
 		}
 
-		[HttpPost]
+   
+
+
+        [HttpPost]
 		public async Task<ActionResult<Usuario>> CreateUser(Usuario us)
 		{
 			_context.Usuarios.Add(us);
@@ -63,8 +69,11 @@ namespace ApiCrud.Controllers
 		}
 
 
+       
 
-		[HttpDelete("{Id:int}")]
+
+
+        [HttpDelete("{Id:int}")]
 		public async Task<ActionResult<Usuario>> DeleteUsers(int Id)
 		{
 			var user = await _context.Usuarios.AsNoTracking().FirstOrDefaultAsync(u => u.Id == Id);
