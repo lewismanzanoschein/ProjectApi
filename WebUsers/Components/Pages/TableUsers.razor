@@ -1,0 +1,70 @@
+﻿@page "/table/users"
+@using WebUsers.Models;
+@inject IHttpClientFactory ClientFactory;
+@inject NavigationManager n;
+
+<div class="container">
+    <h3 class="mt-4 mb-3">Tabla de Usuarios</h3>
+    <a href="/form/users" class="btn btn-primary mb-3">Crear Usuario</a>
+    <table class="table table-striped">
+        <thead class="thead-primary">
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellidos</th>
+                <th scope="col">CC</th>
+                <th scope="col">Teléfono</th>
+                <th scope="col">Fecha Nacimiento</th>
+                <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (listausuarios != null && listausuarios.Count > 0)
+            {
+                @foreach (var user in listausuarios)
+                {
+                    <tr>
+                        <td>@user.Id</td>
+                        <td>@user.Nombre</td>
+                        <td>@user.Apellidos</td>
+                        <td>@user.Numero_Identificacion</td>
+                        <td>@user.Telefono</td>
+                        <td>@user.Fecha_Nacimiento.Date.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <a href=@($"/datauser/{user.Id}") class="btn btn-primary">Consultar</a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" class="text-center">No hay usuarios disponibles.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@code {
+    private List<Usuario> listausuarios { get; set; }
+    private HttpClient _client;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _client = ClientFactory.CreateClient("ServerClient");
+        try
+        {
+            listausuarios = await _client.GetFromJsonAsync<List<Usuario>>("/api/usuarios");
+        }
+        catch (Exception ex)
+        {
+            // Aquí puedes manejar el error, por ejemplo, mostrando un mensaje al usuario
+            Console.WriteLine($"Error al obtener los usuarios: {ex.Message}");
+        }
+    }
+
+ 
+    }
+

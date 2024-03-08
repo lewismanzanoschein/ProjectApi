@@ -1,6 +1,6 @@
 ﻿@page "/form/users"
 
-@using ApiRestUser.Models;
+@using WebUsers.Models;
 @inject IHttpClientFactory ClientFactory;
 @inject NavigationManager navigationManager;
 
@@ -10,27 +10,34 @@
   
     <div class="card-body">
         <EditForm Model="_contact " OnSubmit="Enviar" FormName="formUsers">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
             <div class="mb-3">
                 <label class="form-label">Nombre: </label>
                 <InputText @bind-Value="_contact.Nombre" />
+                <ValidationMessage For="() => _contact.Nombre" />
             </div>
             <div class="mb-3">
                 <label class="form-label">Apellidos:</label>
                 <InputText @bind-Value="_contact.Apellidos" />
+                <ValidationMessage For="() => _contact.Apellidos" />
             </div>
             <div class="mb-3">
                 <label class="form-label">Cc:</label><br />
                 <InputNumber @bind-Value="_contact.Numero_Identificacion" />
+                <ValidationMessage For="() => _contact.Numero_Identificacion" />
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Telefono:</label>
                 <InputNumber @bind-Value="_contact.Telefono" />
+                <ValidationMessage For="() => _contact.Telefono" />
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Fecha de Nacimiento:</label>
                 <InputDate @bind-Value="_contact.Fecha_Nacimiento" />
+                <ValidationMessage For="() => _contact.Fecha_Nacimiento" />
             </div>
 
             <button type="submit" class="btn btn-primary">Submit</button>

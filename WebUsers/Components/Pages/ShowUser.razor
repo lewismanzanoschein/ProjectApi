@@ -1,0 +1,110 @@
+﻿@page "/datauser/{Id:int}"
+@using WebUsers.Models;
+@inject HttpClient http
+@inject NavigationManager Navigationmanager;
+@rendermode InteractiveServer
+
+@if (usuario != null)
+{
+    <div class="card border border-secondary shadow-sm" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title mb-4 text-center">@usuario.Nombre @usuario.Apellidos</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <span class="text-primary fw-bold">Número de Identificación:</span> @usuario.Numero_Identificacion
+                </li>
+                <li class="list-group-item">
+                    <span class="text-primary fw-bold">Fecha de Nacimiento:</span> @usuario.Fecha_Nacimiento.Date.ToString("dd/MM/yyyy")
+                </li>
+                <li class="list-group-item">
+                    <span class="text-primary fw-bold">Teléfono:</span> @usuario.Telefono
+                </li>
+            </ul>
+            <div class="mt-3 d-grid">
+                <a href="@($"/form/{usuario.Id}")" class="btn btn-success">Editar</a>
+            </div>
+            <div class="mt-3 d-grid">
+                <button class="btn btn-primary" @onclick="() => ShowModal()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+    @if (ShowStatusModal)
+    {
+        <div class="modal" tabindex="-1" style="display:block">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Eliminar Usuario</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p>¿Estás seguro de que deseas eliminar este usuario?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" @onclick="async ()=> await Delete()">Sí</button>
+                        <button type="button" class="btn btn-secondary" @onclick="CloseModal">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+}
+else
+{
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [Inject] public IHttpClientFactory ClientFactory { get; set; }
+
+    private bool ShowStatusModal;
+    public Usuario usuario { get; set; }
+    private HttpClient _client;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        _client = ClientFactory.CreateClient("ServerClient");
+
+        try
+        {
+
+            usuario = await _client.GetFromJsonAsync<Usuario>($"/api/usuarios/{Id}");
+
+        }
+        catch (Exception ex)
+        {
+
+            Console.WriteLine($"Error al obtener los usuarios: {ex.Message}");
+        }
+    }
+
+    private async Task Delete()
+    {
+        if (Id > 0)
+        {
+            await _client.DeleteAsync($"api/usuarios/{Id}");
+            Navigationmanager.NavigateTo("/table/users");
+        }
+        else
+        {
+            Console.WriteLine("Por favor, ingrese un ID de empleado válido.");
+        }
+    }
+
+    public void ShowModal()
+    {
+        ShowStatusModal = true;
+    }
+
+    public void CloseModal()
+    {
+        ShowStatusModal = false;
+    }
+
+}

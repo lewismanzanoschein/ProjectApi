@@ -1,6 +1,6 @@
 ﻿@page "/form/{Id:int}"
 
-@using ApiRestUser.Models;
+@using WebUsers.Models;
 @inject NavigationManager navigationManager;
 
 <h3>Actualizar</h3>
@@ -42,14 +42,14 @@
 @code {
     [Parameter]
     public int Id { get; set; }
-    
+
     [Inject] private HttpClient _client { get; set; }
-    
+
     [Inject] public IHttpClientFactory ClientFactory { get; set; }
-    
+
     [SupplyParameterFromForm(FormName = "UpdateUser")]
     public Usuario? User { get; set; }
-    
+
     protected override async Task OnInitializedAsync()
     {
         if (User == null)
@@ -62,10 +62,11 @@
 
     private async Task UpdateUserAsync()
     {
-        
+        _client = ClientFactory.CreateClient("ServerClient");
         HttpResponseMessage response = await _client.PutAsJsonAsync($"/api/usuarios/{Id}", User);
         if (response.IsSuccessStatusCode)
         {
+            navigationManager.NavigateTo("/table/users");
             Console.WriteLine("Usuario actualizado con éxito.");
         }
     }
